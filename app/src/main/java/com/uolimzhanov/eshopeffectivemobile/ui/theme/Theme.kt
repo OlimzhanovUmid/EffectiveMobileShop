@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 private val EMColorScheme = lightColorScheme(
     primary = Pink,
     secondary = LightPink,
-    tertiary = LightGrey,
+    tertiary = LightGray,
     onPrimary = Color.White,
     surface = Color.White,
 
