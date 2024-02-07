@@ -28,5 +28,39 @@ fun NavGraphBuilder.loginNavGraph(
     composable(
         route = Screen.Login.route
     ) {
+        val viewModel = it.sharedViewModel<LoginViewModel>(navController = navController)
+        val loginState by viewModel.loginState.collectAsStateWithLifecycle()
+        val isFirstNameValid by remember {
+            mutableStateOf(loginState.firstName.isCyrillic())
+        }
+        val isLastNameValid by remember {
+            derivedStateOf {
+                loginState.lastName.isCyrillic()
+            }
+        }
+        LoginScreen(
+            modifier = Modifier
+                .padding(paddingValues)
+                .statusBarsPadding()
+                .navigationBarsPadding(),
+            state = loginState,
+            onFirstNameChanged = { firstName ->
+                viewModel.onEvent(LoginUiEvent.FirstNameChanged(firstName))
+            },
+            onLastNameChanged = { lastName ->
+                viewModel.onEvent(LoginUiEvent.LastNameChanged(lastName))
+            },
+            onPhoneNumberChanged = { phoneNumber ->
+                viewModel.onEvent(LoginUiEvent.PhoneNumberChanged(phoneNumber))
+            },
+            onLoginClick = {
+                navController.navigate(Screen.Catalog.route)
+            },
+            onClearFirstName = { viewModel.onEvent(LoginUiEvent.ClearFirstName) },
+            onClearLastName = { viewModel.onEvent(LoginUiEvent.ClearLastName) },
+            onClearPhoneNumber = { viewModel.onEvent(LoginUiEvent.ClearPhoneNumber) },
+            isLastNameValid = isLastNameValid,
+            isFirstNameValid = isFirstNameValid
+        )
     }
 }
