@@ -11,9 +11,9 @@ private val EMColorScheme = lightColorScheme(
     tertiary = LightGray,
     onPrimary = Color.White,
     surface = Color.White,
+    background = Color.White,
 
     /* Other default colors to override
-    background = Color(0xFFFFFBFE),
     onSecondary = Color.White,
     onTertiary = Color.White,
     onBackground = Color(0xFF1C1B1F),
