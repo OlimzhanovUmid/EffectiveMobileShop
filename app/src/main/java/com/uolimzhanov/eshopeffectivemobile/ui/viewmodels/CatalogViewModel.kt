@@ -2,7 +2,11 @@ package com.uolimzhanov.eshopeffectivemobile.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.uolimzhanov.eshopeffectivemobile.model.mappers.toItem
+import com.uolimzhanov.eshopeffectivemobile.model.mappers.toUiItem
 import com.uolimzhanov.eshopeffectivemobile.model.repository.CatalogRepository
+import com.uolimzhanov.eshopeffectivemobile.model.repository.ItemsRepository
+import com.uolimzhanov.eshopeffectivemobile.model.repository.UsersRepository
 import com.uolimzhanov.eshopeffectivemobile.ui.screens.catalog.CatalogState
 import com.uolimzhanov.eshopeffectivemobile.ui.screens.catalog.CatalogUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +19,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class CatalogViewModel @Inject constructor(
-    private val productsRepo: CatalogRepository,
+    private val catalogRepo: CatalogRepository,
+    private val itemsRepo: ItemsRepository,
 ): ViewModel() {
     private val _catalogState = MutableStateFlow(CatalogState())
     val catalogState = _catalogState.asStateFlow()
@@ -23,9 +28,9 @@ class CatalogViewModel @Inject constructor(
     init {
         viewModelScope.launch { 
             _catalogState.value = _catalogState.value.copy(
-                catalog = productsRepo.getCatalog()
             )
         }
+        refreshItems()
     }
 
     fun onEvent(event: CatalogUiEvent){
@@ -41,6 +46,27 @@ class CatalogViewModel @Inject constructor(
                     openedItem = event.item
                 )
             }
+
+            is CatalogUiEvent.SaveItem -> {
+                refreshItems()
+                viewModelScope.launch {
+                    if(event.item.isLiked)
+                        itemsRepo.deleteItem(event.item.toItem())
+                    else
+                        itemsRepo.insertItem(event.item.toItem())
+                }
+            }
+        }
+    }
+
+    private fun refreshItems(){
+        viewModelScope.launch {
+            _catalogState.value = _catalogState.value.copy(
+                items = catalogRepo.getCatalog().items
+                    .map { it.toUiItem(
+                        itemsRepo.getItemById(it.id) != null
+                    ) }
+            )
         }
     }
 }

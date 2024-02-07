@@ -41,6 +41,7 @@ import com.uolimzhanov.eshopeffectivemobile.ui.theme.Pink
 fun ImagePager(
     modifier: Modifier = Modifier,
     images: List<Int> = listOf(1, 2),
+    onSaveItem: () -> Unit = {},
     isProductLiked: Boolean = false
 ){
     Box(modifier = modifier){
@@ -69,7 +70,7 @@ fun ImagePager(
                 modifier = Modifier.fillMaxSize()
             )
         }
-        IconButton(onClick = { /*TODO*/ }, Modifier.align(Alignment.TopEnd)) {
+        IconButton(onClick = { onSaveItem() }, Modifier.align(Alignment.TopEnd)) {
             Icon(
                 painter = painterResource(
                     id = if(isProductLiked)

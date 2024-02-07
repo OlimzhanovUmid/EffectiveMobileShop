@@ -66,6 +66,9 @@ fun NavGraphBuilder.mainNavGraph(
                 onOpenClick = { item ->
                     viewModel.onEvent(CatalogUiEvent.OpenItem(item))
                     navController.navigate(Screen.ItemScreen.route)
+                },
+                onSaveItem = { item ->
+                    viewModel.onEvent(CatalogUiEvent.SaveItem(item))
                 }
             )
         }
@@ -86,7 +89,22 @@ fun NavGraphBuilder.mainNavGraph(
                 isDescriptionVisible = isDescriptionVisible,
                 areIngredientsVisible = areIngredientsVisible,
                 paddingValues = paddingValues,
-                item = catalogState.openedItem
+                uiItem = catalogState.openedItem,
+                onSaveClick = {
+                    viewModel.onEvent(CatalogUiEvent.SaveItem(it))
+                }
+            )
+        }
+        composable(
+            route = Screen.Account.route
+        ){entry ->
+
+            val viewModel = entry.sharedViewModel<CatalogViewModel>(navController = navController)
+            val catalogState by viewModel.catalogState.collectAsState()
+            AccountScreen(
+                modifier = Modifier.padding(paddingValues),
+                user = catalogState.currentUser,
+                items = catalogState.items.filter { it.isLiked }
             )
         }
     }
@@ -101,11 +119,7 @@ fun NavGraphBuilder.mainNavGraph(
     ){
 
     }
-    composable(
-        route = Screen.Account.route
-    ){
 
-    }
 }
 
 @Composable

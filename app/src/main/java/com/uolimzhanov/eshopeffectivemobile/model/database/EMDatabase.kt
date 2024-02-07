@@ -2,7 +2,9 @@ package com.uolimzhanov.eshopeffectivemobile.model.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.uolimzhanov.eshopeffectivemobile.model.database.dao.ItemsDao
 import com.uolimzhanov.eshopeffectivemobile.model.database.dao.UsersDao
+import com.uolimzhanov.eshopeffectivemobile.model.database.entity.ItemDb
 import com.uolimzhanov.eshopeffectivemobile.model.database.entity.UserDb
 
 /**
@@ -11,10 +13,12 @@ import com.uolimzhanov.eshopeffectivemobile.model.database.entity.UserDb
 
 @Database(
     entities = [
-        UserDb::class
+        UserDb::class,
+        ItemDb::class
     ],
     version = 1
 )
 abstract class EMDatabase: RoomDatabase() {
     abstract val usersDao: UsersDao
+    abstract val itemsDao: ItemsDao
 }

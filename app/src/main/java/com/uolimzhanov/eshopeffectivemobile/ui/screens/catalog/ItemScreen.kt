@@ -47,13 +47,13 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uolimzhanov.eshopeffectivemobile.R
+import com.uolimzhanov.eshopeffectivemobile.model.Images
 import com.uolimzhanov.eshopeffectivemobile.model.entity.Feedback
 import com.uolimzhanov.eshopeffectivemobile.model.entity.Info
-import com.uolimzhanov.eshopeffectivemobile.model.entity.Item
 import com.uolimzhanov.eshopeffectivemobile.model.entity.Price
+import com.uolimzhanov.eshopeffectivemobile.model.entity.UiItem
 import com.uolimzhanov.eshopeffectivemobile.ui.controls.EMButton
 import com.uolimzhanov.eshopeffectivemobile.ui.generic.ImagePager
-import com.uolimzhanov.eshopeffectivemobile.ui.generic.Images
 import com.uolimzhanov.eshopeffectivemobile.ui.generic.RatingBar
 import com.uolimzhanov.eshopeffectivemobile.ui.theme.EShopEffectiveMobileTheme
 import com.uolimzhanov.eshopeffectivemobile.ui.theme.Gray
@@ -66,11 +66,12 @@ import com.uolimzhanov.eshopeffectivemobile.ui.theme.Pink
  */
 @Composable
 fun ItemScreen(
-    item: Item = Item(),
+    uiItem: UiItem = UiItem(false),
     isDescriptionVisible: Boolean = true,
     areIngredientsVisible: Boolean = true,
     onDescriptionVisibilityChange: () -> Unit = {},
     onIngredientsVisibilityChange: () -> Unit = {},
+    onSaveClick: (UiItem) -> Unit = {},
     paddingValues: PaddingValues = PaddingValues()
 ){
     val density = LocalDensity.current
@@ -90,7 +91,7 @@ fun ItemScreen(
         val style = MaterialTheme.typography.displayLarge
         val fontFamilyResolver = LocalFontFamilyResolver.current
         val paragraph = remember{ mutableStateOf(androidx.compose.ui.text.Paragraph(
-            text = item.ingredients,
+            text = uiItem.ingredients,
             style = style,
             constraints = Constraints(maxWidth = maxWidthInPx),
             density = density,
@@ -101,10 +102,14 @@ fun ItemScreen(
             content = {
                 item{
                     Box(modifier = Modifier.aspectRatio(0.85f)){
-                        Images.images[item.id]?.let {images ->
+                        Images.images[uiItem.id]?.let { images ->
                             ImagePager(
                                 modifier = Modifier.fillMaxSize(),
-                                images = images
+                                images = images,
+                                isProductLiked = uiItem.isLiked,
+                                onSaveItem = {
+                                    onSaveClick(uiItem)
+                                }
                             )
 
                         }
@@ -120,19 +125,19 @@ fun ItemScreen(
                     ListItem(
                         overlineContent = {
                             Text(
-                                text = item.title
+                                text = uiItem.title
                             )
                         },
                         headlineContent = {
                             Text(
-                                text = item.subtitle
+                                text = uiItem.subtitle
                             )
                         },
                         supportingContent = {
                             Text(
                                 text = buildAnnotatedString {
                                     append()
-                                    append("${item.available}")
+                                    append("${uiItem.available}")
                                     append()
                                 }
                             )
@@ -153,15 +158,15 @@ fun ItemScreen(
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        RatingBar(item.feedback.rating.toFloat())
+                        RatingBar(uiItem.feedback.rating.toFloat())
                         Text(
                             text = buildAnnotatedString {
                                 withStyle(style = SpanStyle(color = Orange)) {
-                                    append("${item.feedback.rating}")
+                                    append("${uiItem.feedback.rating}")
                                 }
                                 append(" · ")
                                 withStyle(style = SpanStyle(color = Gray)) {
-                                    append("(${item.feedback.count})")
+                                    append("(${uiItem.feedback.count})")
                                 }
                             },
                             fontWeight = FontWeight.W400,
@@ -178,7 +183,7 @@ fun ItemScreen(
                                 .padding(horizontal = 16.dp)
                         ) {
                             Text(
-                                text = "${item.price.priceWithDiscount} ${item.price.unit}",
+                                text = "${uiItem.price.priceWithDiscount} ${uiItem.price.unit}",
                                 color = Color.Black,
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold,
@@ -188,7 +193,7 @@ fun ItemScreen(
                                 lineHeight = 14.sp
                             )
                             Text(
-                                text = "${item.price.price} ${item.price.unit}",
+                                text = "${uiItem.price.price} ${uiItem.price.unit}",
                                 textDecoration = TextDecoration.LineThrough,
                                 color = Gray,
                                 fontWeight = FontWeight.W400,
@@ -204,7 +209,7 @@ fun ItemScreen(
                                     .background(Pink, RoundedCornerShape(4.dp))
                             ) {
                                 Text(
-                                    text = "-${item.price.discount}%",
+                                    text = "-${uiItem.price.discount}%",
                                     style = MaterialTheme.typography.labelMedium,
                                     fontWeight = FontWeight.W400,
                                     //                                fontFamily = sfProDisplay,
@@ -253,7 +258,7 @@ fun ItemScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    text = item.title,
+                                    text = uiItem.title,
                                     color = Color.Black,
                                     style = MaterialTheme.typography.titleLarge,
                                     maxLines = 1,
@@ -270,7 +275,7 @@ fun ItemScreen(
                     }
                     item{
                         Text(
-                            text = item.description,
+                            text = uiItem.description,
                             modifier = Modifier.padding(horizontal = 16.dp),
                             style = MaterialTheme.typography.labelLarge
                         )
@@ -308,7 +313,7 @@ fun ItemScreen(
                             .fillMaxWidth()
                             .padding(16.dp),
                     ) {
-                        item.info.forEach{info ->
+                        uiItem.info.forEach{ info ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -348,7 +353,7 @@ fun ItemScreen(
                 }
                 item {
                     Text(
-                        text = item.ingredients,
+                        text = uiItem.ingredients,
                         modifier = Modifier.padding(horizontal = 16.dp),
                         style = MaterialTheme.typography.labelLarge,
                         maxLines = if(areIngredientsVisible) paragraph.value.lineCount else 2,
@@ -390,7 +395,7 @@ fun ItemScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "${item.price.priceWithDiscount} ${item.price.unit}",
+                            text = "${uiItem.price.priceWithDiscount} ${uiItem.price.unit}",
                             color = Color.Black,
                             style = MaterialTheme.typography.titleLarge,
                             fontSize = 14.sp,
@@ -399,7 +404,7 @@ fun ItemScreen(
                             lineHeight = 14.sp
                         )
                         Text(
-                            text = "${item.price.price} ${item.price.unit}",
+                            text = "${uiItem.price.price} ${uiItem.price.unit}",
                             textDecoration = TextDecoration.LineThrough,
                             color = Gray,
                             fontWeight = FontWeight.W400,
@@ -432,7 +437,8 @@ fun ItemScreenPreview(){
         Surface {
             ItemScreen(
                 isDescriptionVisible = false,
-                item = Item(
+                uiItem = UiItem(
+                    isLiked = true,
                     id = "cbf0c984-7c6c-4ada-82da-e29dc698bb50",
                     title = "ESFOLIO",
                     subtitle = "Лосьон для тела `ESFOLIO` COENZYME Q10 Увлажняющий 500 мл",

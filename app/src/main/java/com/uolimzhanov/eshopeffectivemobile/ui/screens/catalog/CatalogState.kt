@@ -8,7 +8,7 @@ import com.uolimzhanov.eshopeffectivemobile.model.entity.Tags
  * created by uolimzhanov on 06.02.2024
  */
 data class CatalogState(
-    val catalog: Catalog = Catalog(),
+    val items: List<UiItem> = emptyList(),
     val selectedTag: Tags = Tags.ALL,
-    val openedItem: Item = Item()
+    val openedItem: UiItem = UiItem(false),
 )

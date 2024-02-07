@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -13,9 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,10 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uolimzhanov.eshopeffectivemobile.R
-import com.uolimzhanov.eshopeffectivemobile.model.entity.Feedback
-import com.uolimzhanov.eshopeffectivemobile.model.entity.Info
-import com.uolimzhanov.eshopeffectivemobile.model.entity.Item
-import com.uolimzhanov.eshopeffectivemobile.model.entity.Price
+import com.uolimzhanov.eshopeffectivemobile.model.entity.UiItem
 import com.uolimzhanov.eshopeffectivemobile.ui.theme.EShopEffectiveMobileTheme
 import com.uolimzhanov.eshopeffectivemobile.ui.theme.Gray
 import com.uolimzhanov.eshopeffectivemobile.ui.theme.Orange
@@ -52,11 +45,11 @@ import com.uolimzhanov.eshopeffectivemobile.ui.theme.Pink
  */
 @Composable
 fun ItemCard(
-    item: Item,
+    item: UiItem,
     modifier: Modifier = Modifier,
     images: List<Int> = listOf(1, 2),
-    onSaveClick: (Item) -> Unit = {},
-    onOpenClick: (Item) -> Unit = {}
+    onSaveClick: (UiItem) -> Unit = {},
+    onOpenClick: (UiItem) -> Unit = {}
 ){
     OutlinedCard(
         onClick = { onOpenClick(item) },
@@ -65,7 +58,11 @@ fun ItemCard(
     ) {
         ImagePager(
             images = images,
-            modifier = Modifier.aspectRatio(7/6f)
+            modifier = Modifier.aspectRatio(7/6f),
+            isProductLiked = item.isLiked,
+            onSaveItem = {
+                onSaveClick(item)
+            }
         )
         Box(modifier = Modifier.weight(1f)) {
             Column(
@@ -196,8 +193,9 @@ fun ItemCard(
 @Composable
 fun ItemCardPreview(){
     EShopEffectiveMobileTheme {
-        val items = listOf(
-            Item(
+        /*val items = listOf(
+            UiItem(
+                isLiked = true,
                 id = "cbf0c984-7c6c-4ada-82da-e29dc698bb50",
                 title = "ESFOLIO",
                 subtitle = "Лосьон для тела `ESFOLIO` COENZYME Q10 Увлажняющий 500 мл",
@@ -246,6 +244,6 @@ fun ItemCardPreview(){
                     ItemCard(item = item)
                 }
             }
-        )
+        )*/
     }
 }
