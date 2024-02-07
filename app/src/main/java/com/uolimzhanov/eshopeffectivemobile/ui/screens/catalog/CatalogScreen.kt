@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.uolimzhanov.eshopeffectivemobile.R
+import com.uolimzhanov.eshopeffectivemobile.model.Images
 import com.uolimzhanov.eshopeffectivemobile.model.entity.Catalog
 import com.uolimzhanov.eshopeffectivemobile.model.entity.Item
 import com.uolimzhanov.eshopeffectivemobile.model.entity.SortOrder
@@ -102,15 +103,18 @@ fun CatalogScreen(
             contentPadding = scaffoldPadding,
             content = {
                 items(state.catalog.items){ item ->
-                    ItemCard(
-                        item = item,
-                        modifier = Modifier.padding(2.dp),
-                        onOpenClick = {
-                            if(item.id == it.id) {
-                                onOpenClick(it)
-                            }
-                        }
-                    )
+                    Images.images[item.id]?.let { list ->
+                        ItemCard(
+                            item = item,
+                            modifier = Modifier.padding(2.dp),
+                            onOpenClick = {
+                                if(item.id == it.id) {
+                                    onOpenClick(it)
+                                }
+                            },
+                            images = list
+                        )
+                    }
                 }
             }
         )

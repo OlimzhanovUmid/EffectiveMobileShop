@@ -51,7 +51,7 @@ fun ImagePager(
             state = pagerState,
         ) {
             SubcomposeAsyncImage(
-                model = images,
+                model = images[pagerState.currentPage],
                 contentScale = ContentScale.FillBounds,
                 error = {
                     Box(
@@ -66,7 +66,7 @@ fun ImagePager(
                     }
                 },
                 contentDescription = null,
-                modifier = Modifier
+                modifier = Modifier.fillMaxSize()
             )
         }
         IconButton(onClick = { /*TODO*/ }, Modifier.align(Alignment.TopEnd)) {

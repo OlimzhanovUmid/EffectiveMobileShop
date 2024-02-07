@@ -53,6 +53,7 @@ import com.uolimzhanov.eshopeffectivemobile.model.entity.Item
 import com.uolimzhanov.eshopeffectivemobile.model.entity.Price
 import com.uolimzhanov.eshopeffectivemobile.ui.controls.EMButton
 import com.uolimzhanov.eshopeffectivemobile.ui.generic.ImagePager
+import com.uolimzhanov.eshopeffectivemobile.ui.generic.Images
 import com.uolimzhanov.eshopeffectivemobile.ui.generic.RatingBar
 import com.uolimzhanov.eshopeffectivemobile.ui.theme.EShopEffectiveMobileTheme
 import com.uolimzhanov.eshopeffectivemobile.ui.theme.Gray
@@ -100,7 +101,13 @@ fun ItemScreen(
             content = {
                 item{
                     Box(modifier = Modifier.aspectRatio(0.85f)){
-                        ImagePager(modifier = Modifier.fillMaxSize())
+                        Images.images[item.id]?.let {images ->
+                            ImagePager(
+                                modifier = Modifier.fillMaxSize(),
+                                images = images
+                            )
+
+                        }
                         Icon(
                             painter = painterResource(id = R.drawable.help_circle),
                             contentDescription = null,
