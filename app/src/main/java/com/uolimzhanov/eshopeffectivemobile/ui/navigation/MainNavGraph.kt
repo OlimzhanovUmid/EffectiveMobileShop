@@ -46,9 +46,48 @@ fun NavGraphBuilder.mainNavGraph(
         composable(
             route = Screen.Catalog.route
         ){
+            var sortMenuExpanded by remember { mutableStateOf(false) }
+
+            val viewModel = it.sharedViewModel<CatalogViewModel>(navController = navController)
+            val catalogState by viewModel.catalogState.collectAsStateWithLifecycle()
+
+            CatalogScreen(
+                state = catalogState,
+                paddingValues = paddingValues,
+                isExpanded = sortMenuExpanded,
+                onDismiss = { sortMenuExpanded = false},
+                onSortOrderSelected = {
+                    sortMenuExpanded = false
+                },
+                onExpandedChange = { sortMenuExpanded = !sortMenuExpanded },
+                onSelectTag = { tag ->
+                    viewModel.onEvent(CatalogUiEvent.SelectTag(tag))
+                },
+                onOpenClick = { item ->
+                    viewModel.onEvent(CatalogUiEvent.OpenItem(item))
+                    navController.navigate(Screen.ItemScreen.route)
+                }
+            )
         }
         composable(
             route = Screen.ItemScreen.route,
+        ){entry ->
+            val viewModel = entry.sharedViewModel<CatalogViewModel>(navController = navController)
+            val catalogState by viewModel.catalogState.collectAsState()
+            var isDescriptionVisible by remember {
+                mutableStateOf(true)
+            }
+            var areIngredientsVisible by remember {
+                mutableStateOf(true)
+            }
+            ItemScreen(
+                onDescriptionVisibilityChange = { isDescriptionVisible = !isDescriptionVisible },
+                onIngredientsVisibilityChange = { areIngredientsVisible = !areIngredientsVisible },
+                isDescriptionVisible = isDescriptionVisible,
+                areIngredientsVisible = areIngredientsVisible,
+                paddingValues = paddingValues,
+                item = catalogState.openedItem
+            )
         }
     }
 

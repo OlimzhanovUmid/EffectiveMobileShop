@@ -49,8 +49,72 @@ fun AppContainer(){
     Scaffold(
         modifier = Modifier,
         topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(
+                            id = screens.firstOrNull{
+                                it.route == selectedDestination
+                            }?.titleId ?: R.string.empty
+                        )
+                    )
+                },
+                navigationIcon = {
+                    if(selectedDestination == Screen.ItemScreen.route){
+                        IconButton(onClick = {  }) {
+                            Icon(painter = painterResource(id = R.drawable.left_arrow), contentDescription = null)
+
+                        }
+                    }
+                },
+                actions = {
+                    if(selectedDestination == Screen.ItemScreen.route){
+                        IconButton(onClick = {  }) {
+                            Icon(painter = painterResource(id = R.drawable.send), contentDescription = null)
+
+                        }
+                    }
+                }
+            )
         },
         bottomBar = {
+            if(navController.currentDestination?.route != Screen.Login.route) {
+                BottomAppBar(
+                    modifier = Modifier,
+                    containerColor = Color.White,
+                    contentColor = Color.White,
+                    tonalElevation = 0.dp
+                ) {
+                    screens
+                        .filter{it.route != Screen.Login.route && it.route != Screen.ItemScreen.route}
+                        .forEach { screen ->
+                            NavigationBarItem(
+                                selected = selectedDestination == screen.route,
+                                onClick = {
+                                    navController.navigate(screen.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                },
+                                icon = {
+                                    Icon(painterResource(id = screen.iconId), contentDescription = screen.route)
+                                },
+                                label = {
+                                    Text(
+                                        text = stringResource(id = screen.titleId)
+                                    )
+                                },
+                                colors = NavigationBarItemDefaults.colors(
+                                    selectedIconColor = Pink,
+                                    selectedTextColor = Pink
+                                )
+                            )
+                        }
+                }
+            }
         }
     ) { paddingValues ->
         NavHost(navController = navController, startDestination = NavGraph.Catalog.route){
