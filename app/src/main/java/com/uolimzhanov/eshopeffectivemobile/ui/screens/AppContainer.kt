@@ -115,7 +115,7 @@ fun AppContainer(){
             }
         }
     ) { paddingValues ->
-        NavHost(navController = navController, startDestination = NavGraph.Catalog.route){
+        NavHost(navController = navController, startDestination = NavGraph.Login.route){
             mainNavGraph(
                 navController = navController,
                 paddingValues = paddingValues

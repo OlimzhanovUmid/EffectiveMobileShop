@@ -1,9 +1,13 @@
 package com.uolimzhanov.eshopeffectivemobile.di
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.uolimzhanov.eshopeffectivemobile.model.database.EMDatabase
 import com.uolimzhanov.eshopeffectivemobile.model.network.CatalogApiService
+import com.uolimzhanov.eshopeffectivemobile.utils.DataStoreManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,10 +24,17 @@ import javax.inject.Singleton
  * created by uolimzhanov on 05.02.2024
  */
 
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "data_store")
 const val BASE_URL = "https://run.mocky.io/"
 @Module
 @InstallIn(SingletonComponent::class)
 object SingletonModule {
+
+    @Singleton
+    @Provides
+    fun provideTokenManager(@ApplicationContext context: Context): DataStoreManager = DataStoreManager(context)
+
+
     @Singleton
     @Provides
     fun providesUsersDatabase(

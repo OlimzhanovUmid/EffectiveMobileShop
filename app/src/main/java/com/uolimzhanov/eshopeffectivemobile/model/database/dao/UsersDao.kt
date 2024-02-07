@@ -3,6 +3,7 @@ package com.uolimzhanov.eshopeffectivemobile.model.database.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.uolimzhanov.eshopeffectivemobile.model.database.entity.UserDb
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface UsersDao{
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.NONE)
     suspend fun insertUser(userDb: UserDb)
 
     @Delete
@@ -21,4 +22,7 @@ interface UsersDao{
 
     @Query("select * from users")
     fun getUsers() : Flow<List<UserDb>>
+
+    @Query("select * from users where id = :id")
+    suspend fun getUsersById(id: Int) : UserDb?
 }

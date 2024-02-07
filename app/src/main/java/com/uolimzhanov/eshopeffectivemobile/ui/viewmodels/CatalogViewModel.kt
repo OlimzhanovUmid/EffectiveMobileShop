@@ -21,13 +21,15 @@ import javax.inject.Inject
 class CatalogViewModel @Inject constructor(
     private val catalogRepo: CatalogRepository,
     private val itemsRepo: ItemsRepository,
+    private val usersRepo: UsersRepository
 ): ViewModel() {
     private val _catalogState = MutableStateFlow(CatalogState())
     val catalogState = _catalogState.asStateFlow()
     
     init {
-        viewModelScope.launch { 
+        viewModelScope.launch {
             _catalogState.value = _catalogState.value.copy(
+                currentUser = usersRepo.getUserById()
             )
         }
         refreshItems()

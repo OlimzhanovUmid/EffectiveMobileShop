@@ -54,6 +54,7 @@ fun NavGraphBuilder.loginNavGraph(
                 viewModel.onEvent(LoginUiEvent.PhoneNumberChanged(phoneNumber))
             },
             onLoginClick = {
+                viewModel.onEvent(LoginUiEvent.LogIn)
                 navController.navigate(Screen.Catalog.route)
             },
             onClearFirstName = { viewModel.onEvent(LoginUiEvent.ClearFirstName) },

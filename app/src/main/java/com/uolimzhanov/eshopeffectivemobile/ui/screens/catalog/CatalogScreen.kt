@@ -26,10 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.uolimzhanov.eshopeffectivemobile.R
 import com.uolimzhanov.eshopeffectivemobile.model.Images
-import com.uolimzhanov.eshopeffectivemobile.model.entity.Catalog
-import com.uolimzhanov.eshopeffectivemobile.model.entity.Item
 import com.uolimzhanov.eshopeffectivemobile.model.entity.SortOrder
 import com.uolimzhanov.eshopeffectivemobile.model.entity.Tags
+import com.uolimzhanov.eshopeffectivemobile.model.entity.UiItem
 import com.uolimzhanov.eshopeffectivemobile.ui.generic.ItemCard
 import com.uolimzhanov.eshopeffectivemobile.ui.generic.TagChipsSection
 import com.uolimzhanov.eshopeffectivemobile.ui.theme.EShopEffectiveMobileTheme
@@ -47,7 +46,8 @@ fun CatalogScreen(
     isExpanded: Boolean = true,
     onExpandedChange: () -> Unit = {},
     onDismiss: () -> Unit = {},
-    onOpenClick: (Item) -> Unit = {},
+    onOpenClick: (UiItem) -> Unit = {},
+    onSaveItem: (UiItem) -> Unit = {},
     onSortOrderSelected: (SortOrder) -> Unit = {},
     onSelectTag: (tag: Tags) -> Unit = {},
     paddingValues: PaddingValues
@@ -102,7 +102,7 @@ fun CatalogScreen(
                 .background(Color.White),
             contentPadding = scaffoldPadding,
             content = {
-                items(state.catalog.items){ item ->
+                items(state.items){ item ->
                     Images.images[item.id]?.let { list ->
                         ItemCard(
                             item = item,
@@ -112,7 +112,8 @@ fun CatalogScreen(
                                     onOpenClick(it)
                                 }
                             },
-                            images = list
+                            images = list,
+                            onSaveClick = {onSaveItem(it)}
                         )
                     }
                 }
@@ -126,7 +127,7 @@ fun CatalogScreen(
 fun CatalogScreenPreview(){
     EShopEffectiveMobileTheme {
         Surface {
-            val items = listOf(
+            /*val items = listOf(
                 Item(subtitle = "1"),
                 Item(subtitle = "2"),
                 Item(subtitle = "3"),
@@ -134,7 +135,7 @@ fun CatalogScreenPreview(){
                 Item(subtitle = "5"),
                 Item(subtitle = "6"),
             )
-            CatalogScreen(paddingValues = PaddingValues(), state = CatalogState(Catalog(items)))
+            CatalogScreen(paddingValues = PaddingValues(), state = CatalogState(Catalog(items)))*/
         }
     }
 }
