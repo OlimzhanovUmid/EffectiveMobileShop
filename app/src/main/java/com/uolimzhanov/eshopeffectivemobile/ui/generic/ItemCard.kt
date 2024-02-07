@@ -1,6 +1,5 @@
 package com.uolimzhanov.eshopeffectivemobile.ui.generic
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,7 +38,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uolimzhanov.eshopeffectivemobile.R
-import com.uolimzhanov.eshopeffectivemobile.model.entity.Product
+import com.uolimzhanov.eshopeffectivemobile.model.entity.Feedback
+import com.uolimzhanov.eshopeffectivemobile.model.entity.Info
+import com.uolimzhanov.eshopeffectivemobile.model.entity.Item
+import com.uolimzhanov.eshopeffectivemobile.model.entity.Price
 import com.uolimzhanov.eshopeffectivemobile.ui.theme.EShopEffectiveMobileTheme
 import com.uolimzhanov.eshopeffectivemobile.ui.theme.Gray
 import com.uolimzhanov.eshopeffectivemobile.ui.theme.Orange
@@ -48,16 +50,16 @@ import com.uolimzhanov.eshopeffectivemobile.ui.theme.Pink
 /**
  * created by uolimzhanov on 02.02.2024
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ProductCard(
-    product: Product,
+fun ItemCard(
+    item: Item,
     modifier: Modifier = Modifier,
     images: List<Int> = listOf(1, 2),
-    onSaveClick: (Product) -> Unit = {}
+    onSaveClick: (Item) -> Unit = {},
+    onOpenClick: (Item) -> Unit = {}
 ){
     OutlinedCard(
-        onClick = { /*TODO*/ },
+        onClick = { onOpenClick(item) },
         shape = RoundedCornerShape(8.dp),
         modifier = modifier.aspectRatio(7f/12f)
     ) {
@@ -72,12 +74,15 @@ fun ProductCard(
             ) {
                 Column(modifier = Modifier.padding(horizontal = 8.dp)) {
                         Text(
-                            text = "${product.price.price} ${product.price.unit}",
+                            text = "${item.price.price} ${item.price.unit}",
                             textDecoration = TextDecoration.LineThrough,
                             color = Gray,
                             fontWeight = FontWeight.W400,
+//                            fontFamily = sfProDisplay,
                             style = MaterialTheme.typography.labelSmall,
-                            fontSize = 9.sp
+                            fontSize = 9.sp,
+                            maxLines = 1,
+                            lineHeight = 14.sp
                         )
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -85,11 +90,14 @@ fun ProductCard(
                         modifier = Modifier.wrapContentHeight()
                     ) {
                         Text(
-                            text = "${product.price.priceWithDiscount} ${product.price.unit}",
+                            text = "${item.price.priceWithDiscount} ${item.price.unit}",
                             color = Color.Black,
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp
+//                            fontFamily = sfProDisplay,
+                            fontSize = 14.sp,
+                            maxLines = 1,
+                            lineHeight = 14.sp
                         )
                         Box(
                             modifier = Modifier
@@ -97,9 +105,10 @@ fun ProductCard(
                                 .background(Pink, RoundedCornerShape(4.dp))
                         ) {
                             Text(
-                                text = "-${product.price.discount}%",
+                                text = "-${item.price.discount}%",
                                 style = MaterialTheme.typography.labelMedium,
                                 fontWeight = FontWeight.W400,
+//                                fontFamily = sfProDisplay,
                                 color = Color.White,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
@@ -107,26 +116,33 @@ fun ProductCard(
                                         vertical = 1.dp, horizontal = 4.dp
                                     )
                                     .align(Alignment.Center),
-                                fontSize = 9.sp
+                                fontSize = 9.sp,
+                                maxLines = 1,
+                                lineHeight = 14.sp
                             )
                         }
                     }
                     Text(
-                        text = product.title,
+                        text = item.title,
                         color = Color.Black,
                         style = MaterialTheme.typography.titleLarge,
-                        fontSize = 12.sp
+//                        fontFamily = sfProDisplay,
+                        fontSize = 12.sp,
+                        maxLines = 1,
+                        lineHeight = 14.sp
                     )
                 }
 
                 Text(
-                    text = product.subtitle,
+                    text = item.subtitle,
                     modifier = Modifier
                         .padding(start = 8.dp, end = 24.dp)
                         .wrapContentHeight()
                         .fillMaxWidth(),
                     style = MaterialTheme.typography.labelLarge,
-                    fontSize = 10.sp
+//                    fontFamily = sfProDisplay,
+                    fontSize = 10.sp,
+                    lineHeight = 14.sp,
                 )
                 Row(
                     modifier = Modifier.padding(start = 8.dp),
@@ -141,12 +157,13 @@ fun ProductCard(
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(color = Orange)) {
-                                append("${product.feedback.rating} ")
+                                append("${item.feedback.rating} ")
                             }
                             withStyle(style = SpanStyle(color = Gray)) {
-                                append("(${product.feedback.count})")
+                                append("(${item.feedback.count})")
                             }
                         },
+//                        fontFamily = sfProDisplay,
                         fontWeight = FontWeight.W400,
                         fontSize = 9.sp,
                         style = MaterialTheme.typography.titleLarge
@@ -154,7 +171,7 @@ fun ProductCard(
                 }
             }
             IconButton(
-                onClick = { onSaveClick(product) },
+                onClick = { onSaveClick(item) },
                 Modifier
                     .background(Pink, RoundedCornerShape(8.dp, 0.dp, 8.dp, 0.dp))
                     .align(Alignment.BottomEnd).fillMaxHeight(32/144f).fillMaxWidth(32/168f)
@@ -166,6 +183,7 @@ fun ProductCard(
                     fontSize = 32.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = W200,
+//                    fontFamily = sfProDisplay,
                     color = Color.White
                 )
             }
@@ -176,23 +194,56 @@ fun ProductCard(
 
 @Preview
 @Composable
-fun ProductCardPreview(){
+fun ItemCardPreview(){
     EShopEffectiveMobileTheme {
-        val products = listOf(
-            Product(subtitle = "1"),
-            Product(subtitle = "2"),
-            Product(subtitle = "3"),
-            Product(subtitle = "4"),
-            Product(subtitle = "5"),
-            Product(subtitle = "6"),
+        val items = listOf(
+            Item(
+                id = "cbf0c984-7c6c-4ada-82da-e29dc698bb50",
+                title = "ESFOLIO",
+                subtitle = "Лосьон для тела `ESFOLIO` COENZYME Q10 Увлажняющий 500 мл",
+                price = Price(
+                    price = "749",
+                    discount = 35,
+                    priceWithDiscount = "489",
+                    unit = "₽"),
+                feedback = Feedback(
+                    count= 51,
+                    rating = 4.5
+                ),
+                tags = listOf(
+                    "body"
+                ),
+                available = 100,
+                description = "Лосьон для тела `ESFOLIO` COENZYME Q10 Увлажняющий содержит минеральную воду и соду, способствует глубокому очищению пор от различных загрязнений, контроллирует работу сальных желез, сужает поры. Обладает мягким антиептическим действием, не пересушивает кожу. Минеральная вода тонизирует и смягчает кожу.",
+                info = listOf(
+                    Info(
+                        title = "Артикул товара",
+                        value = "441187"
+                    ),
+                    Info(
+                        title = "Область использования",
+                        value = "Тело"
+                    ),
+                    Info(
+                        title = "Страна производства",
+                        value = "Франция"
+                    )
+                ),
+                ingredients = "Glycerin Palmitic Acid, Stearic Acid, Capric Acid, Sodium Benzoate"
+            ),
+            Item(subtitle = "2"),
+            Item(subtitle = "3"),
+            Item(subtitle = "4"),
+            Item(subtitle = "5"),
+            Item(subtitle = "6"),
         )
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier,
             contentPadding = PaddingValues(2.dp),
             content = {
-                items(products) { product ->
-                    ProductCard(product = product)
+                items(items) { item ->
+                    ItemCard(item = item)
                 }
             }
         )
