@@ -102,7 +102,8 @@ fun TextFieldsPreview(){
                 value = "text",
                 onValueChange = {},
                 modifier = Modifier.padding(16.dp),
-                enabled = false
+                enabled = true,
+                isError = true
             )
         }
     }
