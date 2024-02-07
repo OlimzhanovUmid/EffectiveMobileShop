@@ -20,5 +20,5 @@ interface UsersDao{
     suspend fun deleteUser(userDb: UserDb)
 
     @Query("select * from users")
-    fun checkIfUserExists() : Flow<List<UserDb>>
+    fun getUsers() : Flow<List<UserDb>>
 }
