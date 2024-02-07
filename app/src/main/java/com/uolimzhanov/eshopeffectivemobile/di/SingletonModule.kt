@@ -3,6 +3,7 @@ package com.uolimzhanov.eshopeffectivemobile.di
 import android.content.Context
 import androidx.room.Room
 import com.uolimzhanov.eshopeffectivemobile.model.database.EMDatabase
+import com.uolimzhanov.eshopeffectivemobile.model.network.CatalogApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,7 +35,7 @@ object SingletonModule {
 
     @Singleton
     @Provides
-    fun provideOkhttpClient(): OkHttpClient {
+    fun providesOkhttpClient(): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient.Builder()
@@ -47,10 +48,17 @@ object SingletonModule {
 
     @Singleton
     @Provides
-    fun provideRetrofitBuilder(okHttpClient: OkHttpClient): Retrofit.Builder {
+    fun providesRetrofitBuilder(okHttpClient: OkHttpClient): Retrofit.Builder {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
     }
+
+    @Singleton
+    @Provides
+    fun providesCatalogApiService(retrofit: Retrofit.Builder): CatalogApiService =
+        retrofit
+            .build()
+            .create(CatalogApiService::class.java)
 }
