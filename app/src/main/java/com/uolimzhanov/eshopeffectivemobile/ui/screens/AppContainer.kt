@@ -61,9 +61,8 @@ fun AppContainer(){
                 },
                 navigationIcon = {
                     if(selectedDestination == Screen.ItemScreen.route){
-                        IconButton(onClick = {  }) {
+                        IconButton(onClick = { navController.navigateUp() }) {
                             Icon(painter = painterResource(id = R.drawable.left_arrow), contentDescription = null)
-
                         }
                     }
                 },
@@ -71,7 +70,6 @@ fun AppContainer(){
                     if(selectedDestination == Screen.ItemScreen.route){
                         IconButton(onClick = {  }) {
                             Icon(painter = painterResource(id = R.drawable.send), contentDescription = null)
-
                         }
                     }
                 }
