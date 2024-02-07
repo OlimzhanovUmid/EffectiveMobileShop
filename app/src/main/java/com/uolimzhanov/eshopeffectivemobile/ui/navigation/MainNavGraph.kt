@@ -32,6 +32,7 @@ fun NavGraphBuilder.mainNavGraph(
         startDestination = Screen.Login.route,
         route = NavGraph.Login.route
     ) {
+       loginNavGraph(navController, paddingValues)
     }
     composable(
         route = Screen.Home.route
