@@ -57,7 +57,7 @@ fun AccountScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp, vertical = 16.dp)
-                    .background(LightGray),
+                    .background(LightGray, RoundedCornerShape(8.dp)),
                 colors = CardDefaults.cardColors().copy(
                     containerColor = LightGray
                 )
@@ -101,7 +101,7 @@ fun AccountScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp)
-                    .background(LightGray),
+                    .background(LightGray, RoundedCornerShape(8.dp)),
                 colors = CardDefaults.cardColors().copy(
                     containerColor = LightGray
                 )
@@ -140,7 +140,7 @@ fun AccountScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp)
-                    .background(LightGray),
+                    .background(LightGray, RoundedCornerShape(8.dp)),
                 colors = CardDefaults.cardColors().copy(
                     containerColor = LightGray
                 )
@@ -174,7 +174,7 @@ fun AccountScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp)
-                    .background(LightGray),
+                    .background(LightGray, RoundedCornerShape(8.dp)),
                 colors = CardDefaults.cardColors().copy(
                     containerColor = LightGray
                 )
@@ -208,7 +208,7 @@ fun AccountScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp)
-                    .background(LightGray),
+                    .background(LightGray, RoundedCornerShape(8.dp)),
                 colors = CardDefaults.cardColors().copy(
                     containerColor = LightGray
                 )
@@ -242,7 +242,7 @@ fun AccountScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp)
-                    .background(LightGray),
+                    .background(LightGray, RoundedCornerShape(8.dp)),
                 colors = CardDefaults.cardColors().copy(
                     containerColor = LightGray
                 )
