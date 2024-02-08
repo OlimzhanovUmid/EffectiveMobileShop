@@ -6,6 +6,7 @@ import com.uolimzhanov.eshopeffectivemobile.model.database.entity.UserDb
 import com.uolimzhanov.eshopeffectivemobile.model.repository.UsersRepository
 import com.uolimzhanov.eshopeffectivemobile.ui.screens.login.LoginState
 import com.uolimzhanov.eshopeffectivemobile.ui.screens.login.LoginUiEvent
+import com.uolimzhanov.eshopeffectivemobile.utils.DataStoreManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +18,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val usersRepo: UsersRepository
+    private val usersRepo: UsersRepository,
+    private val dataStoreManager: DataStoreManager
 ) : ViewModel() {
 
     private val _loginState = MutableStateFlow(LoginState())
@@ -42,11 +44,23 @@ class LoginViewModel @Inject constructor(
             }
             LoginUiEvent.LogIn -> {
                 viewModelScope.launch {
-                    usersRepo.insertUser(UserDb(
-                        firstName = _loginState.value.firstName,
-                        lastName = _loginState.value.lastName,
-                        phoneNumber = _loginState.value.phoneNumber
-                    ))
+                    val dataStoreUser = usersRepo.getCurrentUser()
+                    if (dataStoreUser.firstName == _loginState.value.firstName &&
+                            dataStoreUser.lastName == _loginState.value.lastName &&
+                                dataStoreUser.phoneNumber == _loginState.value.phoneNumber
+                    ){
+                        _loginState.value = _loginState.value.copy(
+                            wasLoggedIn = true
+                        )
+                    } else {
+                        usersRepo.insertUser(
+                            UserDb(
+                                firstName = _loginState.value.firstName,
+                                lastName = _loginState.value.lastName,
+                                phoneNumber = _loginState.value.phoneNumber
+                            )
+                        )
+                    }
                 }
             }
 

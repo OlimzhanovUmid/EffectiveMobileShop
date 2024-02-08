@@ -15,9 +15,9 @@ class UsersRepository @Inject constructor(
     private val db: EMDatabase,
     private val dataStoreManager: DataStoreManager
 ){
-    suspend fun insertUser(userDb: UserDb) {
+    suspend fun insertUser(userDb: UserDb){
+        dataStoreManager.saveUserJson(userDb)
         db.usersDao.insertUser(userDb)
-        dataStoreManager.saveUserId(userDb.id)
     }
 
     suspend fun deleteUser(userDb: UserDb) {
@@ -30,6 +30,13 @@ class UsersRepository @Inject constructor(
     }
 
     suspend fun getUserById(): UserDb {
-        return db.usersDao.getUsersById(dataStoreManager.getUserId() ?: 1) ?: UserDb(-1,"error", "error", "error")
+        return db.usersDao.getUsersById(dataStoreManager.getUserId()) ?: UserDb(-1,"error", "error", "error")
+    }
+
+    suspend fun getCurrentUser(): UserDb {
+        return dataStoreManager.getUserJson()
+    }
+    suspend fun getIdByRowId(rowId: Long): Int {
+        return db.usersDao.getIdByRowId(rowId)
     }
 }

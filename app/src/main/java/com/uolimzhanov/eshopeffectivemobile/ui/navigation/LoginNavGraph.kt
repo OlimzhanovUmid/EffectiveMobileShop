@@ -55,7 +55,9 @@ fun NavGraphBuilder.loginNavGraph(
             },
             onLoginClick = {
                 viewModel.onEvent(LoginUiEvent.LogIn)
-                navController.navigate(Screen.Catalog.route)
+                //if (loginState.wasLoggedIn){
+                    navController.navigate(Screen.Catalog.route)
+                //} else navController.navigate(Screen.Home.route)
             },
             onClearFirstName = { viewModel.onEvent(LoginUiEvent.ClearFirstName) },
             onClearLastName = { viewModel.onEvent(LoginUiEvent.ClearLastName) },

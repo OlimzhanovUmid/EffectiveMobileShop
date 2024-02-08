@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface UsersDao{
     @Insert(onConflict = OnConflictStrategy.NONE)
-    suspend fun insertUser(userDb: UserDb)
+    suspend fun insertUser(userDb: UserDb): Long
 
     @Delete
     suspend fun deleteUser(userDb: UserDb)
@@ -24,5 +24,8 @@ interface UsersDao{
     fun getUsers() : Flow<List<UserDb>>
 
     @Query("select * from users where id = :id")
-    suspend fun getUsersById(id: Int) : UserDb?
+    suspend fun getUsersById(id: Int?) : UserDb?
+
+    @Query("select id from users where rowid= :rowId")
+    suspend fun getIdByRowId(rowId: Long) : Int
 }

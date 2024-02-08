@@ -6,5 +6,6 @@ package com.uolimzhanov.eshopeffectivemobile.ui.screens.login
 data class LoginState(
     val firstName: String = "",
     val lastName: String = "",
-    val phoneNumber: String = ""
+    val phoneNumber: String = "",
+    val wasLoggedIn: Boolean = false
 )

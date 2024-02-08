@@ -29,7 +29,7 @@ class CatalogViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _catalogState.value = _catalogState.value.copy(
-                currentUser = usersRepo.getUserById()
+                currentUser = usersRepo.getCurrentUser()
             )
         }
         refreshItems()
