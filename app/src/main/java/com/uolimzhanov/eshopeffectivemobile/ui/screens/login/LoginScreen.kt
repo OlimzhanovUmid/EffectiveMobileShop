@@ -81,7 +81,7 @@ fun LoginScreen(
                 placeholder = {
                     Text(text = stringResource(R.string.first_name), color = Gray)
                 },
-                isError = isFirstNameValid,
+                isError = state.firstName != "" && !isFirstNameValid,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next
                 ),
@@ -113,7 +113,7 @@ fun LoginScreen(
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next
                 ),
-                isError = isLastNameValid,
+                isError = state.lastName != "" && !isLastNameValid,
                 trailingIcon = {
                     if (state.lastName != "") {
                         IconButton(onClick = {
@@ -159,12 +159,9 @@ fun LoginScreen(
                 }
             )
 
-            /*PhoneField(phone = state.phoneNumber, onPhoneChanged = {
-                onPhoneNumberChanged(it)
-            })*/
             EMButton(
                 onClick = { onLoginClick() },
-                enabled = state.firstName != "" && state.lastName != "" && state.phoneNumber != "",
+                enabled = state.firstName != "" && state.lastName != "" && state.phoneNumber != "" && isFirstNameValid && isLastNameValid,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp)

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -31,7 +30,9 @@ fun NavGraphBuilder.loginNavGraph(
         val viewModel = it.sharedViewModel<LoginViewModel>(navController = navController)
         val loginState by viewModel.loginState.collectAsStateWithLifecycle()
         val isFirstNameValid by remember {
-            mutableStateOf(loginState.firstName.isCyrillic())
+            derivedStateOf {
+                loginState.firstName.isCyrillic()
+            }
         }
         val isLastNameValid by remember {
             derivedStateOf {
