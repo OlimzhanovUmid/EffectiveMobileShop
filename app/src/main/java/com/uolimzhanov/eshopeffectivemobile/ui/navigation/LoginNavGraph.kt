@@ -39,6 +39,11 @@ fun NavGraphBuilder.loginNavGraph(
                 loginState.lastName.isCyrillic()
             }
         }
+        val isPhoneNumberValid by remember {
+            derivedStateOf {
+                loginState.phoneNumber.length == 10
+            }
+        }
         LoginScreen(
             modifier = Modifier
                 .padding(paddingValues)
@@ -64,7 +69,8 @@ fun NavGraphBuilder.loginNavGraph(
             onClearLastName = { viewModel.onEvent(LoginUiEvent.ClearLastName) },
             onClearPhoneNumber = { viewModel.onEvent(LoginUiEvent.ClearPhoneNumber) },
             isLastNameValid = isLastNameValid,
-            isFirstNameValid = isFirstNameValid
+            isFirstNameValid = isFirstNameValid,
+            isPhoneNumberValid = isPhoneNumberValid
         )
     }
 }

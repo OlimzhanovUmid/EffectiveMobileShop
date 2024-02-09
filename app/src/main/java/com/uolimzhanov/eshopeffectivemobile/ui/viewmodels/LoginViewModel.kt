@@ -6,7 +6,6 @@ import com.uolimzhanov.eshopeffectivemobile.model.database.entity.UserDb
 import com.uolimzhanov.eshopeffectivemobile.model.repository.UsersRepository
 import com.uolimzhanov.eshopeffectivemobile.ui.screens.login.LoginState
 import com.uolimzhanov.eshopeffectivemobile.ui.screens.login.LoginUiEvent
-import com.uolimzhanov.eshopeffectivemobile.utils.DataStoreManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,8 +17,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val usersRepo: UsersRepository,
-    private val dataStoreManager: DataStoreManager
+    private val usersRepo: UsersRepository
 ) : ViewModel() {
 
     private val _loginState = MutableStateFlow(LoginState())
@@ -53,11 +51,14 @@ class LoginViewModel @Inject constructor(
                             wasLoggedIn = true
                         )
                     } else {
+                        val formattedNumber = if(_loginState.value.phoneNumber.length == 10)"+ 7 ${_loginState.value.phoneNumber.substring(0, 3)} " +
+                                "${_loginState.value.phoneNumber.substring(3, 6)}-" +
+                                "${_loginState.value.phoneNumber.substring(6, 8)}-${_loginState.value.phoneNumber.substring(8, 10)}" else "+ 7 XXX XXX-XX-XX"
                         usersRepo.insertUser(
                             UserDb(
                                 firstName = _loginState.value.firstName,
                                 lastName = _loginState.value.lastName,
-                                phoneNumber = _loginState.value.phoneNumber
+                                phoneNumber = formattedNumber
                             )
                         )
                     }

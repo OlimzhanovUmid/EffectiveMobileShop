@@ -50,6 +50,7 @@ fun LoginScreen(
     state: LoginState = LoginState(),
     isFirstNameValid: Boolean,
     isLastNameValid: Boolean,
+    isPhoneNumberValid: Boolean,
     onFirstNameChanged: (String) -> Unit = {},
     onLastNameChanged: (String) -> Unit = {},
     onPhoneNumberChanged: (String) -> Unit = {},
@@ -81,12 +82,12 @@ fun LoginScreen(
                 placeholder = {
                     Text(text = stringResource(R.string.first_name), color = Gray)
                 },
-                isError = state.firstName != "" && !isFirstNameValid,
+                isError = state.firstName.isNotEmpty() && !isFirstNameValid,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next
                 ),
                 trailingIcon = {
-                    if (state.firstName != "") {
+                    if (state.firstName.isNotEmpty()) {
                         IconButton(onClick = {
                             onClearFirstName()
                         }) {
@@ -113,9 +114,9 @@ fun LoginScreen(
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next
                 ),
-                isError = state.lastName != "" && !isLastNameValid,
+                isError = state.lastName.isNotEmpty() && !isLastNameValid,
                 trailingIcon = {
-                    if (state.lastName != "") {
+                    if (state.lastName.isNotEmpty()) {
                         IconButton(onClick = {
                             onClearLastName()
                         }) {
@@ -136,6 +137,7 @@ fun LoginScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp),
+                isError = state.phoneNumber.isNotEmpty() && !isPhoneNumberValid,
                 placeholder = {
                     Text(text = stringResource(R.string.phone_number), color = Gray)
                 },
@@ -145,7 +147,7 @@ fun LoginScreen(
                 ),
                 visualTransformation = PhoneNumberVisualTransformation(mask = phoneMask, '0'),
                 trailingIcon = {
-                    if (state.phoneNumber != "") {
+                    if (state.phoneNumber.isNotEmpty()) {
                         IconButton(onClick = {
                             onClearPhoneNumber()
                         }) {
@@ -161,7 +163,12 @@ fun LoginScreen(
 
             EMButton(
                 onClick = { onLoginClick() },
-                enabled = state.firstName != "" && state.lastName != "" && state.phoneNumber != "" && isFirstNameValid && isLastNameValid,
+                enabled = state.firstName.isNotEmpty()
+                        && state.lastName.isNotEmpty()
+                        && state.phoneNumber.isNotEmpty()
+                        && isFirstNameValid
+                        && isLastNameValid
+                        && isPhoneNumberValid,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp)
@@ -200,8 +207,9 @@ fun AuthScreenPreview(){
         Surface {
             LoginScreen(
                 isFirstNameValid = true,
-                isLastNameValid = true
-                )
+                isLastNameValid = true,
+                isPhoneNumberValid = true
+            )
         }
     }
 }
